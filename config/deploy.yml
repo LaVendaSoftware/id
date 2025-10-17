@@ -2,16 +2,16 @@
 service: id
 
 # Name of the container image.
-image: your-user/id
+image: lavendasoftware/id
 
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
+    - 188.245.209.207
   # job:
   #   hosts:
-  #     - 192.168.0.1
-  #   cmd: bin/jobs
+  #     - 188.245.209.207
+  #   cmd: bin/good_job start --enable-cron
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 # Remove this section when using multiple web servers and ensure you terminate SSL at your load balancer.
@@ -19,13 +19,14 @@ servers:
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
   ssl: true
-  host: app.example.com
+  hosts:
+    - id.lavenda.com.br
 
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
-  # server: registry.digitalocean.com / ghcr.io / ...
-  username: your-user
+  server: ghcr.io
+  username: owalmirneto
 
   # Always use an access token rather than real password when possible.
   password:
@@ -35,12 +36,18 @@ registry:
 env:
   secret:
     - RAILS_MASTER_KEY
+    - DATABASE_URL
+  clear:
+    ## Rails
+    RAILS_ENV: production
+    RAILS_LOG_TO_STDOUT: enabled
+    RAILS_SERVE_STATIC_FILES: enabled
   # clear:
   #   # Set number of cores available to the application on each server (default: 1).
   #   WEB_CONCURRENCY: auto
 
   #   # Match this to any external database server to configure Active Record correctly
-  #   DB_HOST: 192.168.0.2
+  #   DB_HOST: 188.245.209.207
 
   #   # Log everything from Rails
   #   RAILS_LOG_LEVEL: debug
@@ -52,6 +59,8 @@ aliases:
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
   dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
+  migrate: app exec --interactive --reuse "bin/rails db:migrate"
+  # worker: app logs -f -r worker
 
 # Use a persistent storage volume for sqlite database files and local Active Storage files.
 # Recommended to change this to a mounted volume path that is backed up off server.
@@ -66,7 +75,7 @@ asset_path: /rails/public/assets
 
 # Configure the image builder.
 builder:
-  arch: amd64
+  arch: arm64
 
   # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
   # remote: ssh://docker@docker-builder-server
@@ -83,25 +92,17 @@ builder:
 #   user: app
 
 # Use accessory services (secrets come from .kamal/secrets).
-# accessories:
-#   db:
-#     image: mysql:8.0
-#     host: 192.168.0.2
-#     # Change to 3306 to expose port to the world instead of just local network.
-#     port: "127.0.0.1:3306:3306"
-#     env:
-#       clear:
-#         MYSQL_ROOT_HOST: '%'
-#       secret:
-#         - MYSQL_ROOT_PASSWORD
-#     files:
-#       - config/mysql/production.cnf:/etc/mysql/my.cnf
-#       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-#     directories:
-#       - data:/var/lib/mysql
-#   redis:
-#     image: valkey/valkey:8
-#     host: 192.168.0.2
-#     port: 6379
-#     directories:
-#       - data:/data
+accessories:
+  db:
+    image: postgres:17.2
+    hosts:
+      - 188.245.209.207
+    port: "36160:5432"
+    env:
+      clear:
+        POSTGRES_USER: lavenda
+        POSTGRES_DB: id_production
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data
