@@ -38,3 +38,10 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Ignore .env files
+/.env*
+
+# Kamal
+/.kamal/secrets*
+!/.kamal/secrets.example
