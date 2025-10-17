@@ -12,7 +12,7 @@ dbprepare:
 	bin/rails db:setup db:test:prepare db:schema:load db:migrate RAILS_ENV=test
 
 ci:
-	make brakeman rubocop system
+	make brakeman rubocop rails-test
 
 code-fix:
 	make rubocop-fix
@@ -26,8 +26,8 @@ rubocop:
 rubocop-fix:
 	bin/rubocop -A
 
-system:
-	bin/rails db:test:prepare test:system
+rails-test:
+	bin/rails test
 
 access-server:
 	ssh root@188.245.209.207

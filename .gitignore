@@ -45,3 +45,6 @@
 # Kamal
 /.kamal/secrets*
 !/.kamal/secrets.example
+
+# Tests
+/coverage/*

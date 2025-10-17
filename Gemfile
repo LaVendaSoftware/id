@@ -25,7 +25,7 @@ gem "cssbundling-rails"
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -41,16 +41,25 @@ gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
-
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
   # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
   gem "bundler-audit", require: false
-
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  # https://github.com/presidentbeef/brakeman
   gem "brakeman", require: false
-
-  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-  gem "rubocop-rails-omakase", require: false
+  # https://github.com/standardrb/standard#usage
+  gem "standard"
+  # https://github.com/standardrb/standard-rails#usage
+  gem "standard-rails"
+  # https://github.com/rubocop/rubocop-capybara#usage
+  gem "rubocop-capybara"
+  # https://github.com/rubocop/rubocop-factory_bot#usage
+  gem "rubocop-factory_bot"
+  # https://github.com/Shopify/erb-lint#installation
+  gem "erb_lint"
+  # https://github.com/thoughtbot/factory_bot_rails
+  gem "factory_bot_rails"
+  # https://github.com/stympy/faker
+  gem "faker"
 end
 
 group :development do
@@ -60,6 +69,12 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  # https://github.com/teamcapybara/capybara#setup
   gem "capybara"
+  # https://github.com/SeleniumHQ/selenium/tree/trunk/rb#install
   gem "selenium-webdriver"
+  # https://github.com/simplecov-ruby/simplecov#getting-started
+  gem "simplecov"
+  # https://github.com/vicentllongo/simplecov-json#usage
+  gem "simplecov-json"
 end
